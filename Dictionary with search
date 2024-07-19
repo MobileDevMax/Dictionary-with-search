@@ -1,0 +1,101 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Dictionary with search',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: SearchPage(),
+    );
+  }
+}
+
+class SearchPage extends StatefulWidget {
+  @override
+  _SearchPageState createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  final List<String> _allItems = [
+    'About',
+    'All', 
+    'And', 
+    'As', 
+    'At', 
+    'Be', 
+    'Because',
+    'But', 
+    'By',
+    'Come', 
+    'Could', 
+    'Day', 
+    'Do', 
+    'Down', 
+    'Each',
+    'Find',
+    'For', 
+    'From', 
+    'Get', 
+    'Give',
+    'Go', 
+   ];
+
+  List<String> _filteredItems = [];
+  String _searchText = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredItems = _allItems;
+  }
+
+  void _filterItems(String searchText) {
+    setState(() {
+      _searchText = searchText;
+      _filteredItems = _allItems
+          .where((item) => item.toLowerCase().contains(searchText.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dictionary with search'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              onChanged: _filterItems,
+              decoration: InputDecoration(
+                labelText: 'Search',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _filteredItems.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(_filteredItems[index]),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
